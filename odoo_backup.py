@@ -9,8 +9,8 @@ from datetime import date, datetime
 def parse_args():
     parser = ArgumentParser(
         prog='odoo_backup',
-        description="Python script to backup Odoo databases.",
-        epilog="'mailutils' package is required in order to run this script."
+        description="Python script to backup Odoo databases",
+        epilog="'mailutils' package is required in order to run this script"
     )
 
     parser.add_argument("-m", "--monthly",
@@ -38,22 +38,21 @@ def parse_args():
         parser.print_help()
         exit()
     else:
-        # Generate dictionary with instances information
         with open(args.filename) as f:
-            instances = load(f)
+            environments = load(f)
             f.close()
 
     today = date.today()
     now = datetime.now()
 
     if args.monthly:
-        return today.strftime("%d-%m-yy"), instances
+        return today.strftime("%d-%m-yy"), environments
     elif args.time:
         return '%s-%shs' % (today.strftime("%d-%m-yy"),
                             now.strftime("%H"),
-                            instances)
+                            environments)
     else:
-        return today.strftime("%d-mm-yy"), instances
+        return today.strftime("%d-mm-yy"), environments
 
 
 if __name__ == "__main__":
