@@ -1,0 +1,9 @@
+{
+    "environments": [
+        {
+            "80": "all",
+            "saas": ["database_name"]
+        }
+    ]
+}
+
