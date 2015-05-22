@@ -7,7 +7,7 @@ Summary
 Author
 ======
 
-Liso Gallo - liso@riseup.net
+Liso Gallo - @lisogallo
 
 
 Usage
