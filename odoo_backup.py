@@ -14,7 +14,7 @@ def do_backup(username, database, path):
     )
     if db_exists:
         run_command(
-            'su - postgres -c "/usr/bin/pg_dump %s --format=c --file=%s%s.dump'
+            'su - postgres -c "/usr/bin/pg_dump %s --format=c --file=%s%s.dump"'
             % (database, path, database)
         )
 
