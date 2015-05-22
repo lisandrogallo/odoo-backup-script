@@ -5,7 +5,6 @@ from sys import argv, exit
 from json import load
 from datetime import date, datetime
 from helpers import check_binary, check_path, check_root, run_command
-from fabric.operations import local
 
 
 def do_backup(username, database, path):
@@ -108,4 +107,3 @@ if __name__ == "__main__":
                     do_backup(username, database, backup_dir)
         except:
             print 'error'
-
