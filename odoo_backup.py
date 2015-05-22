@@ -9,8 +9,7 @@ from helpers import check_binary, check_path, check_root, run_command
 
 def do_backup(username, database, path):
     db_exists = run_command(
-        "su - postgres -c 'psql -lt' | grep %s | awk '{print $1}' \
-        | grep -vE '^-|:|^List|^Name|template[0|1]' | grep -xE %s"
+        "su - postgres -c \"psql -lt\" | grep %s | awk '{print $1}' | grep -xE %s"
         % (username, database)
     )
     if db_exists:
@@ -80,15 +79,15 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    if not make_checks():
-        exit()
+    # if not make_checks():
+    #     exit()
 
     dump_name, json = parse_args()
 
     for environment, values in json.items():
 
         username = values[0]['username']
-        backup_dir = values[0]['system_path'] + 'backups'
+        backup_dir = values[0]['system_path'] + 'backups/'
         databases = values[0]['databases']
 
         try:
@@ -100,8 +99,10 @@ if __name__ == "__main__":
 
         try:
             if isinstance(databases, unicode) and databases == 'all':
-                cmd = "su - postgres -c 'psql -lt' | grep %s | awk '{print $1}' | grep -vE '^-|:|^List|^Name|template[0|1]'" % (username)
-                databases = run_command(cmd).split()
+                databases = run_command(
+                    "su - postgres -c \"psql -lt\" | grep %s | awk '{print $1}'"
+                    % (username)
+                ).split()
             if isinstance(databases, list):
                 for database in databases:
                     do_backup(username, database, backup_dir)
