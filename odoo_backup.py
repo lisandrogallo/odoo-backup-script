@@ -7,15 +7,15 @@ from datetime import date, datetime
 from helpers import check_binary, check_path, check_root, run_command
 
 
-def do_backup(username, database, path):
+def do_backup(username, database, path, dump_name):
     db_exists = run_command(
         "su - postgres -c \"psql -lt\" | grep %s | awk '{print $1}' | grep -xE %s"
         % (username, database)
     )
     if db_exists:
         run_command(
-            'su - postgres -c "/usr/bin/pg_dump %s --format=c --file=%s%s.dump"'
-            % (database, path, database)
+            'su - postgres -c "/usr/bin/pg_dump %s --format=c --file=%s%s-%s.dump"'
+            % (database, path, database, dump_name)
         )
 
 
@@ -72,8 +72,7 @@ def parse_args():
         return today.strftime("%d-%m-yy"), environments
     elif args.time:
         return '%s-%shs' % (today.strftime("%d-%m-yy"),
-                            now.strftime("%H"),
-                            environments)
+                            now.strftime("%H")), environments
     else:
         return today.strftime("%d-mm-yy"), environments
 
@@ -106,6 +105,6 @@ if __name__ == "__main__":
                 ).split()
             if isinstance(databases, list):
                 for database in databases:
-                    do_backup(username, database, backup_dir)
+                    do_backup(username, database, backup_dir, dump_name)
         except:
             print 'error'
