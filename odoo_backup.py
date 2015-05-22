@@ -91,11 +91,12 @@ if __name__ == "__main__":
         databases = values[0]['databases']
 
         try:
-            run_command('id %s' % username)
+            if not run_command('id %s' % username):
+                raise Exception
             check_path(backup_dir)
             run_command('/bin/chown postgres:postgres %s' % backup_dir)
         except:
-            exit()
+            continue
 
         try:
             if isinstance(databases, unicode) and databases == 'all':
