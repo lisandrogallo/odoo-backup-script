@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import os
-import errno
-import subprocess
-from sys import exit
+from os import path, makedirs
+from errno import EEXIST
+from subprocess import Popen, PIPE
 
 
-def check_if_root():
-    """Check if the script is running with root privileges"""
-    if not os.geteuid() == 0:
-        print("\n***ERROR: This script must be run by root.\n")
-        exit()
-
-
-def run_bash(cmd):
-    """Takes Bash commands and returns them"""
+def run_command(cmd, output=True):
     try:
-        print "~$: %s" % cmd
-        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-        out = p.stdout.read().strip()
-        return out  # This is the stdout from the shell command
+        # p = Popen(cmd, shell=True, stdout=PIPE)
+        # out = p.stdout.read().strip()
+        if output:
+            print '[bash]: %s' % cmd
+            # return out  # This is the stdout from the shell command
+        else:
+            return True
     except:
         return False
 
@@ -32,12 +26,20 @@ def file_exists(filename):
         return False
 
 
-def path_exists(path):
+def check_path(path):
     try:
-        os.makedirs(path)
+        makedirs(path)
     except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise
+        if exception.errno != EEXIST:
+            raise Exception
+
+
+def check_root():
+    if run_command('whoami', False) == 'root':
+        return True
+    else:
+        print("\n***ERROR: This script must be run by root.\n")
+        return False
 
 
 def check_binary(bin_filename, error_on_missing=False):
@@ -49,9 +51,8 @@ def check_binary(bin_filename, error_on_missing=False):
                 '/bin/',
                 '/usr/bin/']
     for d in BIN_DIRS:
-        p = os.path.expandvars(os.path.join(d, bin_filename))
-        if os.path.exists(p):
-            return p
+        if path.exists(path.expandvars(path.join(d, bin_filename))):
+            return True
     if error_on_missing:
         print "\n***ERROR: '%s' was not found on your system. \
         Please install this package and run the script again." % (bin_filename)

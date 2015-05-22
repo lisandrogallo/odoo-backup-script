@@ -1,8 +1,20 @@
 {
-    "environments": [
+    "80": [
         {
-            "80": "all",
-            "saas": ["database_name"]
+            "description": "Odoo Server 8.0",
+            "username": "odoo-80",
+            "system_path": "/opt/odoo/80/",
+            "databases": "all",
+            "admins": ["mail@example.com"]
+        }
+    ],
+    "saas": [
+        {
+            "description": "Odoo Server Saas",
+            "username": "odoo-saas",
+            "system_path": "/opt/odoo/saas/",
+            "databases": ["database_name"],
+            "admins": ["mail@example.com"]
         }
     ]
 }

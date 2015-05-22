@@ -4,6 +4,31 @@ from argparse import ArgumentParser
 from sys import argv, exit
 from json import load
 from datetime import date, datetime
+from helpers import check_binary, check_path, check_root, run_command
+from fabric.operations import local
+
+
+def do_backup(username, database, path):
+    db_exists = run_command(
+        "su - postgres -c 'psql -lt' | grep %s | awk '{print $1}' \
+        | grep -vE '^-|:|^List|^Name|template[0|1]' | grep -xE %s"
+        % (username, database)
+    )
+    if db_exists:
+        run_command(
+            'su - postgres -c "/usr/bin/pg_dump %s --format=c --file=%s%s.dump'
+            % (database, path, database)
+        )
+
+
+def make_checks():
+    mail = check_binary('mail', True)
+    grive = check_binary('grive', True)
+    root = check_root()
+    if mail and grive and root:
+        return True
+    else:
+        return False
 
 
 def parse_args():
@@ -56,4 +81,31 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    print parse_args()
+    if not make_checks():
+        exit()
+
+    dump_name, json = parse_args()
+
+    for environment, values in json.items():
+
+        username = values[0]['username']
+        backup_dir = values[0]['system_path'] + 'backups'
+        databases = values[0]['databases']
+
+        try:
+            run_command('id %s' % username)
+            check_path(backup_dir)
+            run_command('/bin/chown postgres:postgres %s' % backup_dir)
+        except:
+            exit()
+
+        try:
+            if isinstance(databases, unicode) and databases == 'all':
+                cmd = "su - postgres -c 'psql -lt' | grep %s | awk '{print $1}' | grep -vE '^-|:|^List|^Name|template[0|1]'" % (username)
+                databases = run_command(cmd).split()
+            if isinstance(databases, list):
+                for database in databases:
+                    do_backup(username, database, backup_dir)
+        except:
+            print 'error'
+
