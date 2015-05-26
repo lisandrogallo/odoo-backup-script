@@ -7,11 +7,11 @@ from subprocess import Popen, PIPE
 
 def run_command(cmd, output=True):
     try:
-        # p = Popen(cmd, shell=True, stdout=PIPE)
-        # out = p.stdout.read().strip()
+        p = Popen(cmd, shell=True, stdout=PIPE)
+        out = p.stdout.read().strip()
         if output:
             print '[bash]: %s' % cmd
-            # return out  # This is the stdout from the shell command
+            return out  # This is the stdout from the shell command
         else:
             return True
     except:
