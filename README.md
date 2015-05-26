@@ -3,13 +3,6 @@ Summary
 
 **odoo_backup** is a python script to backup PostgreSQL databases in use with **Odoo**. This script must be run with root privileges.
 
-
-Author
-======
-
-Liso Gallo - @lisogallo
-
-
 Usage
 =====
 
