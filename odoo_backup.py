@@ -21,9 +21,8 @@ def do_backup(username, database, path, dump_name):
 
 def make_checks():
     mail = check_binary('mail', True)
-    grive = check_binary('grive', True)
     root = check_root()
-    if mail and grive and root:
+    if mail and root:
         return True
     else:
         return False
@@ -78,8 +77,8 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    # if not make_checks():
-    #     exit()
+    if not make_checks():
+        exit()
 
     dump_name, json = parse_args()
 
