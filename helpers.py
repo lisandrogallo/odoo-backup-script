@@ -54,6 +54,5 @@ def check_binary(bin_filename, error_on_missing=False):
         if path.exists(path.expandvars(path.join(d, bin_filename))):
             return True
     if error_on_missing:
-        print "\n***ERROR: '%s' was not found on your system. \
-        Please install this package and run the script again." % (bin_filename)
+        print "\n***ERROR: '%s' was not found on your system. Please install this package and run the script again." % (bin_filename)
         return False
