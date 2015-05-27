@@ -77,8 +77,8 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    if not make_checks():
-        exit()
+    # if not make_checks():
+    #     exit()
 
     dump_name, json = parse_args()
 
