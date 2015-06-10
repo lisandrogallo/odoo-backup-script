@@ -70,8 +70,7 @@ def parse_args():
     if args.monthly:
         return today.strftime("%d-%m-yy"), environments
     elif args.time:
-        return '%s-%shs' % (today.strftime("%d-%m-yy"),
-                            now.strftime("%H")), environments
+        return '-%shs' % now.strftime("%H"), environments
     else:
         return today.strftime("%d-mm-yy"), environments
 
